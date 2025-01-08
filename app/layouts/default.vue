@@ -8,7 +8,7 @@
       <div class="sticky top-0 h-screen overflow-y-auto hidden md:block md:w-[20%] lg:w-[20%]">
           <AppMenu></AppMenu>
       </div>
-      <div class="w-[100%] md:w-[60%] lg:w-[60%]">
+      <div class="w-[100%] md:w-[60%] md:max-w-[600px] lg:w-[60%] pt-8">
         <AppMenuBar></AppMenuBar>
         <div class="px-4 pb-10 m-auto mb-4 sm:px-8 sm:rounded-lg">
           <main class="max-w-none relative">

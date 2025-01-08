@@ -28,7 +28,7 @@ model User {
   memos        Memos[]
   sub_comments SubComments[]
   likes        Likes[]
-
+  tags         Tags[]
   @@map("b_users")
 }
 
@@ -38,12 +38,12 @@ model Memos {
   content       String
   create_ts     DateTime   @default(now())
   updated_ts    DateTime   @updatedAt
-  tags          String     @default("[]")
   visible       String     @default("public") // 可见性 public / group / private 
   defalt_floded Boolean    @default(false) // 默认折起
   flod_tip      String? // 折起时，在标题栏展示折起的原因
   user_id       Int
   user_info     User       @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  tags          String     @default("") // 不关联tag表,手动查
   comments      Comments[]
   likes         Likes[]
 
@@ -83,6 +83,17 @@ model Comments {
   likes        Likes[]
 
   @@map("b_comments")
+}
+
+model Tags {
+  id           Int           @id @default(autoincrement())
+  tag_name     String        @unique
+  create_ts    DateTime      @default(now())
+  updated_ts   DateTime      @updatedAt
+  user_id      Int
+  user_info    User          @relation(fields: [user_id], references: [id], onDelete: NoAction)
+
+  @@map("b_tags")
 }
 
 // 二级评论: 针对一级评论的回复. 以及评论的回复

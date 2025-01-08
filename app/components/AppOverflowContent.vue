@@ -24,7 +24,7 @@ const contentStyle = computed(() => ({
 
 const toggleExpanded = () => {
   // 不再展开，直接进入详情页
-  // expanded.value = !expanded.value;
+  expanded.value = !expanded.value;
 };
 
 const checkOverflow = () => {

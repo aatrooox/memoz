@@ -27,11 +27,11 @@ export default defineEventHandler(async (event) => {
       }
     },
     // 默认查询评论数量
-    _count: {
-      select: {
-        comments: true
-      }
-    }
+    // _count: {
+    //   select: {
+    //     comments: true
+    //   }
+    // }
   }
   // 是否查询关联的评论信息
   // query comment ?
@@ -47,11 +47,11 @@ export default defineEventHandler(async (event) => {
             avatar_url: true
           }
         },
-        _count: {
-          select: {
-            sub_comments: true
-          }
-        }
+        // _count: {
+        //   select: {
+        //     sub_comments: true
+        //   }
+        // }
       }
     }
   }

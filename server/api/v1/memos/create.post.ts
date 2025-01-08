@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
       ...body.data
   }
   console.log(`创建memo`, memoData)
+  
   const data = await prisma.memos.create({
     data: memoData
   })

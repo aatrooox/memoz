@@ -11,35 +11,35 @@ export default defineEventHandler(async (event) => {
       // const auth_token = getRequestHeader(event, 'Authorization')
       const token = getCookie(event, 'token')
       // 如果没有token, 需要先登录
-      if (!token) {
+      if (!token) { 
         // console.log(`无token`, )
         throw createError({
           statusCode: 403,
           message: '请先登录',
         })
       }
-      // const secret = new TextEncoder().encode(jwtSecret)
+      const secret = new TextEncoder().encode(jwtSecret)
       // 校验token是否有效
-      // const { payload, protectedHeader } = await jose.jwtVerify(token, secret).catch( err => {
-      //   console.log(`jose err`, err)
-      //   throw createError({
-      //     statusCode: 401,
-      //     message: '登录已过期，请重新登录',
-      //   })
-      // })
+      const { payload, protectedHeader } = await jose.jwtVerify(token, secret).catch( err => {
+        console.log(`jose err`, err)
+        throw createError({
+          statusCode: 401,
+          message: '登录已过期，请重新登录',
+        })
+      })
 
          // 有人拿到了token, 前端重新部署后更新了nuxtkey
-        // if (payload.nuxtKey !== nuxtSecretKey) {
-        //   console.log(`payload ---- `, payload, payload.nuxtKey, nuxtSecretKey)
-        //   throw createError({
-        //     statusCode: 401,
-        //     message: '博客有更新，请重新登录',
-        //   })
+        if (payload.nuxtKey !== nuxtSecretKey) {
+          console.log(`payload ---- `, payload, payload.nuxtKey, nuxtSecretKey)
+          throw createError({
+            statusCode: 401,
+            message: '博客有更新，请重新登录',
+          })
 
-        // }
+        }
        // 把权限和用户id存到上下文中
-      //  event.context.userId = payload.userId
-      //  event.context.userRole = payload.role
+       event.context.userId = payload.userId
+       event.context.userRole = payload.role
 
        console.log(`auth0 - token - success - ${getRequestURL(event).pathname}`)
       }

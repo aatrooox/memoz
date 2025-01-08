@@ -1,69 +1,16 @@
 <template>
-  <div class="card rounded-lg transition-all duration-300 box-border">
-    <Panel class="box-border" :collapsed="props.memo.floded" @update:collapsed="setPanelCollapsed"
-      @click="checkDetail(props.memo)">
-      <template #header>
-        <div class="flex items-center gap-2">
-          <UserAvatar :user-info="props.memo.user_info"></UserAvatar>
-          <span class="font-bold">{{ props.memo?.user_info?.username }}</span>
-          <Icon v-if="props.memo.defalt_floded" name="icon-park-outline:info" size="1em" class="text-amber-500"
-            v-tooltip.top="'该动态默认被折叠'"></Icon>
-          <span class="folded-tip text-slate-900 text-xs" v-if="props.memo.defalt_floded">{{ props.memo.flod_tip
-            }}</span>
-          <span class="folded-tip-time ml-8 text-slate-400 text-xs" v-if="curCollapsed && props.memo.floded">{{
-            updateDateFromNow(props.memo.create_ts)
-            }}</span>
-        </div>
-      </template>
-      <template #footer>
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex items-center gap-2">
-            <Button @click.stop="likeMemo" severity="secondary" text size="small">
-              <Icon slot="icon" name="icon-park-outline:thumbs-up" mode="svg" ref="likeIcon"
-                :style="{ color: isLiked ? 'red' : '' }" />
-              <span slot="badge">{{ likeCount || props.memo.likes?.length }}</span>
-            </Button>
-            <Button severity="secondary" text size="small" v-tooltip.top="'回复'" @click.stop="memoReply">
-              <Icon name="icon-park-outline:comments" :style="{ color: memo._count?.comments ? 'black' : '' }">
-              </Icon>
-              <span slot="badge" :class="`${memo._count?.comments ? 'font-bold' : ''}`">{{
-                memo._count?.comments ||
-                0 }}</span>
-            </Button>
-            <Button severity="secondary" text size="small" v-tooltip.top="'转发图片'" @click.stop="copyIMG2Clipboard">
-              <Icon name="icon-park-outline:collect-picture"></Icon>
-            </Button>
-            <Button severity="secondary" text size="small" v-tooltip.top="'转发链接'" @click.stop="copyURL2Clipboard">
-              <Icon name="icon-park-outline:share-two"></Icon>
-            </Button>
-          </div>
-          <span class="text-surface-500 text-xs">{{ updateDateFromNow(props.memo.create_ts) }}</span>
-        </div>
-      </template>
-      <template #icons v-if="props.memo.user_id === user?.id">
-        <Button icon="pi pi-cog" severity="secondary" rounded text @click.stop="toggle" />
-        <Menu ref="menu" id="config_menu" :model="items" popup />
-      </template>
-      <!-- <div class="m-0" v-html="props.memo.content">
-      </div> -->
-      <!-- <MDCRenderer :body="ast.body" :data="ast.data" /> -->
+  <div class="card-wrap border rounded-lg">
+    <div class="card rounded-lg transition-all duration-300 box-border p-4 pb-0">
       <AppOverflowContent :show-all="!!showAll">
         <MDC :value="props.memo.content" tag="section" class="mdc-memo-prose prose" />
       </AppOverflowContent>
-    </Panel>
-    <!-- 评论框 回复某条MEMO -->
-    <div class="reply-box w-full pl-4 mt-2" v-if="commentReplyOpen">
-      <AppCommentInput type="reply" :target="memo.user_info.username" @cancel="commentReplyOpen = false"
-        @send="createComment">
-      </AppCommentInput>
-    </div>
-    <!-- 一级评论 -->
-    <div class="comment-level-1-box box-border pl-8 pb-2 relative">
-      <!-- 引导线 -->
-      <div class="absolute left-2 top-[10px] my-0 bottom-0 h-[96%] w-[1px] bg-gray-300"></div>
-      <template v-for="comment in (memo.comments || [])" :key="comment.id">
-        <CommentViewPanel :comment="comment" @refresh="refreshList"></CommentViewPanel>
-      </template>
+      <div class="memo-info flex items-center justify-between py-2">
+        <span></span>
+        <span>
+          <span class="font-bold text-md mr-2">{{ props.memo?.user_info?.username }}</span> 
+          <span class="text-zinc-400 text-xs">{{ updateDateFromNow(props.memo.create_ts) }}</span>
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -105,38 +52,6 @@ const refreshKey = ref(1)
 const commentType = 'memo' // 评论类型
 const props = defineProps<Props>()
 const curCollapsed = ref(props.memo.floded)
-
-const items = ref([
-  {
-    label: '删除',
-    icon: 'pi pi-times',
-    command: async () => {
-      const { data, error }: any = await $http.post('/api/v1/memos/del', {
-        id: props.memo?.id
-      })
-
-      if (error?.value) {
-        disposeError(error)
-        return;
-      }
-
-      toast.add({ severity: 'success', summary: '删除成功', detail: `Memo[${data.value.data?.id}]已被删除！`, life: 3000 });
-      emit('refresh')
-    }
-  }
-]);
-
-const checkDetail = (memo: any) => {
-  navigateTo(`/m/${memo.uid}`)
-}
-
-const setPanelCollapsed = (flag: any) => {
-  curCollapsed.value = flag
-}
-
-const toggle = (event: any) => {
-  menu.value?.toggle(event);
-};
 
 const copyURL2Clipboard = async () => {
   await navigator.clipboard.writeText(`https://blog.zzao.club/m/${props.memo.uid}`);

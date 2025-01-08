@@ -1,7 +1,10 @@
 <template>
-  <div class="flex flex-col box-border pt-8 px-4">
-    <div class="hot-view flex flex-wrap gap-1 transition-all duration-300">
+  <div class="flex flex-col box-border pt-8">
+    <!-- 热力图 -->
+    <div class="hot-view flex flex-wrap gap-1 transition-all duration-300 border box-border p-4 rounded-tl-md rounded-tr-md rounded-br-md relative shadow-inner border-blue-500">
       <div class="w-4 h-4 bg-zinc-300" v-for="item in datas" :style="{}"></div>
+
+      <div class="stats-count absolute left-[-1px] bottom-[-24px] h-6 leading-6 px-2 text-xs border border-t-white rounded-bl-md rounded-br-md shadow-none border-blue-500" v-tooltip="`已累计记录888天`">888</div>
     </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="memos">
-    <div class="memo-editor mb-4" v-if="isLogin">
+    <div class="memo-editor mb-4">
       <AppCommentInput ref="commentRef" @send="createMemo"></AppCommentInput>
     </div>
     <div class="flex flex-col gap-2">
@@ -35,7 +35,7 @@ const toast = useToast()
 const { disposeError } = useErrorDispose()
 const { isLogin, user } = useUser();
 const refreshKey = ref(0)
-
+const inputTag = ref('');
 const refreshList = () => {
   refreshKey.value++
 }
@@ -47,11 +47,30 @@ watch(error, () => {
   disposeError(error)
 })
 
-const createMemo = async (content: string) => {
+const createMemo = async ({ content, tags = [] }: { content: string, tags?: any[]}) => {
+  if (!isLogin.value) { 
+    toast.add({ severity: 'warn', summary: '登录后即可发送', life: 3000 })
+    return 
+  }
+
+  if (tags && tags.length) {
+    const { data, error } = await $http.post('/api/v1/tag/create', {
+      tag_name: tags.join(',')
+    })
+
+    if (error && error.value) {
+      disposeError(error)
+      return;
+    }
+
+    toast.add({ severity: 'success', summary: `已发送创建标签[${tags}]`, life: 3000 })
+  }
+
   if (content) {
     // const content = memoContent.value.replaceAll('`', '\\`')
     const { data, error } = await $http.post('/api/v1/memos/create', {
       content: content,
+      tags: tags.join(','),
       user_id: user.value?.id
     })
 
