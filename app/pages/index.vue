@@ -53,24 +53,24 @@ const createMemo = async ({ content, tags = [] }: { content: string, tags?: any[
     return 
   }
 
-  if (tags && tags.length) {
-    const { data, error } = await $http.post('/api/v1/tag/create', {
-      tag_name: tags.join(',')
-    })
+  // if (tags && tags.length) {
+  //   const { data, error } = await $http.post('/api/v1/tag/create', {
+  //     tag_name: tags.join(',')
+  //   })
 
-    if (error && error.value) {
-      disposeError(error)
-      return;
-    }
+  //   if (error && error.value) {
+  //     disposeError(error)
+  //     return;
+  //   }
 
-    toast.add({ severity: 'success', summary: `已发送创建标签[${tags}]`, life: 3000 })
-  }
+  //   toast.add({ severity: 'success', summary: `已发送创建标签[${tags}]`, life: 3000 })
+  // }
 
   if (content) {
     // const content = memoContent.value.replaceAll('`', '\\`')
     const { data, error } = await $http.post('/api/v1/memos/create', {
       content: content,
-      tags: tags.join(','),
+      tags,
       user_id: user.value?.id
     })
 

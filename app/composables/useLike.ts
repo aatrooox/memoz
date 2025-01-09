@@ -10,7 +10,7 @@ export default function useLike() {
   const unLikes: Ref<string[]> = useState('blog_unlikes', () => [])
   const { user } = useUser();
 
-  const targtMap = {
+  const targtMap:any = {
     'article': 'article_id',
     'memo': 'memo_id',
     'comment': 'comment_id',

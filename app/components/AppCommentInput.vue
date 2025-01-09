@@ -16,11 +16,11 @@
       <span class="text-xs text-zinc-400">
         所有人可以回复
       </span>
+
       <Popover ref="emojiPopover">
         <EmojiPicker :native="true" :display-recent="true" :hide-search="true" :hide-group-icons="true"
           :theme="emojiTheme" @select="onSelectEmoji" ref="EmojiPickerRef"></EmojiPicker>
       </Popover>
-
     </div>
     <div class="right">
       <Button size="small" text @click="cancelSend">
@@ -48,7 +48,7 @@ const comment = ref<string>('')
 const showTagList = ref(false);
 // 当前输入的标签在输入内容的位置
 const searchTagIndex = ref<number[]>([]);
-// 
+//
 const inputTag = ref<string>('')
 // type 在哪里评论， target 评论的对象
 const { type = 'memo', target = '' } = defineProps<{ type?: string, target?: string }>()
@@ -65,7 +65,7 @@ const emojiTheme = computed(() => {
   }
 })
 const label = computed(() => {
-  // 发表评论时，显示 在发表 xxx 
+  // 发表评论时，显示 在发表 xxx
   // 回复某条评论时，显示回复 xxx
   if (target) return subCommentLabel.value
 
@@ -85,7 +85,6 @@ const label = computed(() => {
 })
 
 const initTagList = async(tag: string) => {
-  console.log(`tag`, tag)
   const { data } = await $http.get<any[]>('/api/v1/tag/list', { tag }, { key: 'tags - ' + inputTag.value , server: false })
   tags.value = data.value.data;
 }
@@ -111,23 +110,35 @@ const removeTagsFromTextarea = (content: string) => {
   return content.replace(/#([^\s#]+)/g, '').trim();
 }
 
+/**
+ * 选择并插入标签到评论中
+ * 
+ * @param {any} tag - 用户选择的标签对象，包含标签名称等信息
+ */
 const chooseTag = (tag: any) => {
-  console.log(`选择tag`, tag)
+  // 获取标签名称，并在末尾添加一个空格
   const tagName = tag.value.tag_name + ' ';
+  // 解构获取标签插入位置的起始和结束索引
   const [start, end] = searchTagIndex.value;
-  const newContent = comment.value.substring(0, start) + tagName + comment.value.substring(end as number);
-  comment.value = newContent;
+  // 在指定位置插入标签名称
+  comment.value = comment.value.substring(0, start) + tagName + comment.value.substring(end as number);
+  // 计算新的光标位置
   const newCursorIndex = (start as number) + tagName.length;
-  
 
-  nextTick( () => {
+  // 在 Vue 实例的下一个生命周期调用，确保 DOM 已经更新
+  nextTick(() => {
+    // 隐藏标签列表
     showTagList.value = false;
+    // 清空当前选中的标签索引
     searchTagIndex.value = [];
+    // 聚焦到评论输入框
     commentInputRef.value.$el.focus();
+    // 设置光标位置到新插入标签的末尾
     commentInputRef.value.$el.setSelectionRange(newCursorIndex, newCursorIndex);
   })
 }
 
+// 动态展示标签列表
 watch( comment, () => {
   // 此时光标在哪里输入
   const cursorIndex = commentInputRef.value.$el.selectionStart
@@ -156,6 +167,7 @@ watch( comment, () => {
     initTagList(inputTag.value)
    }
 })
+
 const subCommentLabel = computed(() => {
   return `回复@${target || user.value?.username}`
 })

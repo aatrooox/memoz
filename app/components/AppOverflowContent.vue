@@ -39,7 +39,7 @@ onMounted(() => {
     nextTick(checkOverflow)
   }, 100);
 });
-// onUpdated(() => nextTick(checkOverflow));
+onUpdated(() => nextTick(checkOverflow));
 // onActivated(() => nextTick(checkOverflow));
 </script>
 <style lang="less" scoped></style>

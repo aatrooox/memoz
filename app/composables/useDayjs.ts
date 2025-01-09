@@ -29,7 +29,10 @@ export default function useDayjs() {
    * @param date 日期字符串
    * @returns 
    */
-  const formatDate = (date: string) => {
+  const formatDate = (date: string | Date, split?: string) => {
+    if (split) {
+      return dayjs(date).format(`YYYY${split}MM${split}DD`)
+    } 
     return dayjs(date).format('YYYY年MM月DD日')
   }
   

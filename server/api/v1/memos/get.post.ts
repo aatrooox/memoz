@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const data = await prisma.memos.findFirst({
+  const data = await prisma.memo.findFirst({
     where: {
       uid: body.data.uid
     },

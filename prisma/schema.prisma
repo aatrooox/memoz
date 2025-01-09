@@ -24,45 +24,30 @@ model User {
   avatar_url   String?
   role         String        @default("user")
   comments     Comments[]
-  articles     Articles[]
-  memos        Memos[]
+  memos        Memo[]
   sub_comments SubComments[]
   likes        Likes[]
-  tags         Tags[]
+  tags         Tag[]
+
   @@map("b_users")
 }
 
-model Memos {
-  id            Int        @id @default(autoincrement())
-  uid           String     @unique
-  content       String
-  create_ts     DateTime   @default(now())
-  updated_ts    DateTime   @updatedAt
-  visible       String     @default("public") // 可见性 public / group / private 
-  defalt_floded Boolean    @default(false) // 默认折起
-  flod_tip      String? // 折起时，在标题栏展示折起的原因
-  user_id       Int
-  user_info     User       @relation(fields: [user_id], references: [id], onDelete: NoAction)
-  tags          String     @default("") // 不关联tag表,手动查
-  comments      Comments[]
-  likes         Likes[]
+model Memo {
+  id               Int                @id @default(autoincrement())
+  uid              String             @unique
+  content          String
+  create_ts        DateTime           @default(now())
+  updated_ts       DateTime           @updatedAt
+  visible          String             @default("public") // 可见性 public / group / private 
+  defalt_floded    Boolean            @default(false) // 默认折起
+  flod_tip         String? // 折起时，在标题栏展示折起的原因
+  user_id          Int
+  user_info        User               @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  tags             MemoTagRelations[]
+  comments         Comments[]
+  likes            Likes[]
 
-  @@map("b_memos")
-}
-
-model Articles {
-  id         Int        @id @default(autoincrement())
-  uid        String     @unique
-  title      String
-  tags       String     @default("[]")
-  create_ts  DateTime   @default(now())
-  updated_ts DateTime   @updatedAt
-  user_id    Int
-  user_info  User       @relation(fields: [user_id], references: [id], onDelete: NoAction)
-  comments   Comments[]
-  likes      Likes[]
-
-  @@map("b_articles")
+  @@map("b_memo")
 }
 
 // 一级评论: 针对文章和动态的第一级评论
@@ -74,9 +59,7 @@ model Comments {
   updated_ts   DateTime      @updatedAt
   type         String        @default("article") // article / memo / blog
   memo_id      Int?
-  memo_info    Memos?        @relation(fields: [memo_id], references: [id])
-  article_id   Int?
-  article_info Articles?     @relation(fields: [article_id], references: [id])
+  memo_info    Memo?        @relation(fields: [memo_id], references: [id])
   user_id      Int
   user_info    User          @relation(fields: [user_id], references: [id], onDelete: NoAction)
   sub_comments SubComments[] // 一对多的二级评论
@@ -85,15 +68,28 @@ model Comments {
   @@map("b_comments")
 }
 
-model Tags {
-  id           Int           @id @default(autoincrement())
-  tag_name     String        @unique
-  create_ts    DateTime      @default(now())
-  updated_ts   DateTime      @updatedAt
-  user_id      Int
-  user_info    User          @relation(fields: [user_id], references: [id], onDelete: NoAction)
+model Tag {
+  id               Int                @id @default(autoincrement())
+  tag_name         String             @unique
+  create_ts        DateTime           @default(now())
+  updated_ts       DateTime           @updatedAt
+  user_id          Int
+  user_info        User               @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  memos            MemoTagRelations[]
 
-  @@map("b_tags")
+  @@map("b_tag")
+}
+
+model MemoTagRelations {
+  tagId  Int
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: NoAction)
+  memoId Int
+  memo   Memo @relation(fields: [memoId], references: [id], onDelete: NoAction)
+  create_ts        DateTime           @default(now())
+  updated_ts       DateTime           @updatedAt
+  
+  @@id([tagId, memoId])
+  @@map("memo_tag_relations")
 }
 
 // 二级评论: 针对一级评论的回复. 以及评论的回复
@@ -123,9 +119,7 @@ model Likes {
   updated_ts       DateTime     @updatedAt
   target           String       @default("article") // article / memo / comment / subcomment
   memo_id          Int?
-  memo_info        Memos?       @relation(fields: [memo_id], references: [id])
-  article_id       Int?
-  article_info     Articles?    @relation(fields: [article_id], references: [id])
+  memo_info        Memo?       @relation(fields: [memo_id], references: [id])
   sub_comment_id   Int?
   sub_comment_info SubComments? @relation(fields: [sub_comment_id], references: [id])
   comment_id       Int?
@@ -134,9 +128,4 @@ model Likes {
   user_info        User         @relation(fields: [user_id], references: [id], onDelete: NoAction)
 
   @@map("b_likes")
-}
-
-model Settings {
-  id         Int     @id @default(autoincrement())
-  can_regist Boolean @default(false)
 }

@@ -64,7 +64,7 @@ export default defineEventHandler(async (event) => {
     }
   }
   
-  const memos = await prisma.memos.findMany({
+  const memos = await prisma.memo.findMany({
     skip,
     take,
     orderBy: [

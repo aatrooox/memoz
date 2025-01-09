@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   const tagNames = body.data.tag_name.split(',').map( name => ({ tag_name: name, user_id: event.context.userId }) )
 
   for (let tag of tagNames) {
-    await prisma.tags.upsert({
+    await prisma.tag.upsert({
         where: {
           tag_name: tag.tag_name
         },

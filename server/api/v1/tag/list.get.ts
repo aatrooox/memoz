@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
     tag: z.string().optional()
   })
   const query = await useSafeValidatedQuery(event, schema)
-  
+
   if (!query.success) {
     throw createError({
       statusCode: 400,
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const tags = await prisma.tags.findMany({
+  const tags = await prisma.tag.findMany({
     where: {
       tag_name: {
         contains: query.data.tag

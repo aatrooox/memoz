@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
   }
   
 
-  const data = await prisma.memos.delete({
+  const data = await prisma.memo.delete({
     where: {
       id: body.data.id
     }

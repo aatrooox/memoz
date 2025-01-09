@@ -18,17 +18,6 @@ export default defineNuxtConfig({
   },
   // srcDir: '.',
   devtools: { enabled: true },
-  // sourcemap: {
-  //   server: true,
-  //   client: true
-  // },
-  // build: {
-  //   transpile: ['@iconify-json/icon-park-outline'],
-  // },
-  // robots: {
-  //   useAgent: '*',
-  //   allow: '*'
-  // },
   // 把 icon 和客户端捆绑在一起， 减少请求服务端
   icon: {
     clientBundle: {
@@ -63,16 +52,28 @@ export default defineNuxtConfig({
     '@primevue/nuxt-module',
     '@nuxt/image',
     '@nuxt/icon',
-    // '@nuxtjs/robots',
     '@nuxtjs/mdc',
     '@nuxtjs/color-mode'
   ],
-  // 解决了 mdc的一个依赖库 micromark 引入 debug 会报错的问题
-  vite: {
-    optimizeDeps: {
-      include: ["debug"],
-    },
+  // 配置组件自动导入规则
+  components: {
+    // global: true,
+    dirs: ['@/components']
   },
+  mdc: {
+    // components: {
+    //   prose: true,
+      // map: {
+      //   'a': 'MemoProseA'
+      // }
+    // }
+  },
+  // 解决了 mdc的一个依赖库 micromark 引入 debug 会报错的问题
+  // vite: {
+  //   optimizeDeps: {
+  //     include: ["debug"],
+  //   },
+  // },
   // imports: {
   //   presets: [
   //     {
@@ -107,8 +108,7 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/': { ssr: true },
-    '/article': { prerender: true, cache: { maxAge: 60 * 60 } },
-    '/post/**': { cache: { maxAge: 60 * 60 } } 
+    '/api/v1/**': { cors: true }
   },
   css: ['primeicons/primeicons.css', '~/assets/css/main.css'],
   runtimeConfig: {
@@ -136,18 +136,6 @@ export default defineNuxtConfig({
             h2: true,
             h3: true
           },
-        }
-      }
-    }
-  },
-  // 3.0.0-alpha.8 保留路径中的中文
-  content: {
-    build: {
-      markdown: {},
-      pathMeta: {
-        slugifyOptions: {
-          // Keep everything except invalid chars, this will preserve Chinese characters 
-          remove: /[$*+~()'"!\-=#?:@]/g,
         }
       }
     }
