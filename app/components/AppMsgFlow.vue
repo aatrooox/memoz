@@ -22,19 +22,6 @@
 // 记录后的音效: 炉石加buff时的打铁声
 
 
-const modeIcon = computed(() => {
-  switch (colorMode.preference) {
-    case 'system':
-      return 'icon-park-outline:computer'
-    case 'light':
-      return 'icon-park-outline:sun-one'
-    case 'dark':
-      return 'icon-park-outline:moon'
-    default:
-      return 'icon-park-outline:computer'
-  }
-})
-
 const datas = ref([
   {
     date: '2024/01/02',
