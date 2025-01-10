@@ -4,7 +4,7 @@
     <Toast />
     <Toast group="http" position="top-center" />
     <ScrollTop />
-    <div class="m-auto flex-col justify-end md:flex md:flex-row gap-5 box-border">
+    <div class="m-auto flex-col justify-end md:flex md:flex-row md:justify-center gap-5 box-border">
       <!-- <div class="sticky top-0 h-screen overflow-y-auto hidden md:block md:w-[20%] lg:w-[20%]">
           <AppMenu></AppMenu>
       </div> -->
