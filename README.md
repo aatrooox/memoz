@@ -1,42 +1,28 @@
-# Content v2 Minimal Starter
+# Memoz --  Nuxt版Memos
 
-Look at the [Content documentation](https://content.nuxt.com/) to learn more.
+一个类似Memos的web应用, 使用Nuxt3.15(会保持最新nuxt版本)开发
 
-## Setup
+## 已有功能 (1.0)
 
-Make sure to install the dependencies:
+- 支持markdown语法. 基于`@nuxtjs/mdc`实现
+- 支持标签系统, 标签直接内嵌在内容中
+- 支持输入`#`后模糊查询标签
+- 打卡热力图: 笔记数量/天数统计. 统计按累计天数,不会出现为了打卡而打卡的情况
 
-```bash
-# yarn
-yarn install
+## 开发中的功能 (2.0)
 
-# npm
-npm install
+- 批量导出md文件
+- 快捷编辑内容
+- 配置多种md来源, 如: 从第三方api获取, 文件导入/上传
+- Api接口开放, 提供md原内容给其他App
+- 多级标签
+- 多维度筛选和展示笔记(主要用于笔记太多后,根据某个标签或日期快速罗列出所有笔记)
 
-# pnpm
-pnpm install
-```
+## 手机端/客户端
 
-## Development Server
+会基于`Flutter`开发, 但先以`1.0`的功能为主
 
-Start the development server on http://localhost:3000
+## 开发笔记/教程
 
-```bash
-npm run dev
-```
+所有内容的产出, 会第一时间更新到[博客站](https://blog.zzao.club)上, 全部免费和开放
 
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

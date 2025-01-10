@@ -29,11 +29,11 @@ export default function useDayjs() {
    * @param date 日期字符串
    * @returns 
    */
-  const formatDate = (date: string | Date, split?: string) => {
+  const formatDate = (date: string | Date, split?: string, short?: boolean) => {
     if (split) {
-      return dayjs(date).format(`YYYY${split}MM${split}DD`)
+      return dayjs(date).format(short ? `YY${split}MM${split}DD` : `YYYY${split}MM${split}DD`)
     } 
-    return dayjs(date).format('YYYY年MM月DD日')
+    return dayjs(date).format(short ? 'YYYY年MM月DD日' : 'YY年MM月DD日')
   }
   
   const formatFullDate = () => {

@@ -16,8 +16,8 @@
         enter-from-class="opacity-0 scale-90" enter-to-class="opacity-100 scale-100"
         leave-active-class="transition-all transform ease-in-out duration-300 delay-400"
         leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
-        <div class="memo-active-info w-28 absolute -left-28 top-2" v-if="showInfo">
-          <div class="" :style="{ color: textColor, fontSize: textFontSize }">{{ formatDate(props.memo.create_ts, '/') }}</div>
+        <div class="memo-active-info w-22 absolute -left-20 top-2 hidden sm:block" v-if="showInfo">
+          <div class="" :style="{ color: textColor, fontSize: textFontSize }">{{ formatDate(props.memo.create_ts, '/', true) }}</div>
         </div>
       </transition>
 
@@ -41,7 +41,7 @@ const isLikedLocal = ref(false);
 const observer = ref();
 const textColor = ref()
 const textFontSize = ref();
-
+const colorMode = useColorMode()
 interface Props {
   memo: {
     id: number
@@ -178,7 +178,8 @@ const updateTextColor = () => {
   const distanceFromCenter = Math.abs(componentCenter - viewportCenter);
   // 根据距离调整透明度
   const opacity = 1 - Math.min(distanceFromCenter / (viewportHeight / 2), 1);
-  textColor.value = `rgba(0, 0, 0, ${0.5 + opacity * 0.5})`; // 颜色从浅到深
+  const isDark = colorMode.preference === 'dark';
+  textColor.value = isDark ? `rgba(255, 255, 255, ${0.5 + opacity * 0.5})` : `rgba(0, 0, 0, ${0.5 + opacity * 0.5})`; // 颜色从浅到深
   // 根据距离调整字号
   const minFontSize = 10; // 最小字号
   const maxFontSize = 18; // 最大字号

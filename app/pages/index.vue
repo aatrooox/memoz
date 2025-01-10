@@ -4,11 +4,11 @@
       <AppCommentInput ref="commentRef" @send="createMemo"></AppCommentInput>
     </div>
     <div class="flex flex-col gap-2">
-      <div class="btns">
+      <!-- <div class="btns">
         <Button rounded @click="refreshList" :loading="status === 'pending'">
           <Icon name="icon-park-outline:refresh"></Icon>
         </Button>
-      </div>
+      </div> -->
       <template v-for="memo in memoList?.data" :key="memo.id">
         <MemoPanel :memo="memo" @refresh="refreshList"></MemoPanel>
       </template>

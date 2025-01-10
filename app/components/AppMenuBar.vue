@@ -1,47 +1,23 @@
 <template>
-  <div
-    class="flex justify-around sticky mb-4 top-0 w-full z-[999] h-14 border-b-2 border-b-zinc-800 dark:border-b-zinc-400">
+  <div>
     <AppLoginDialog :login="loginBlog" ref="loginForm" @showRegisterDialog="showRegisterDialog"></AppLoginDialog>
     <AppRegisterDialog :regist="userRegist" ref="registerForm"></AppRegisterDialog>
     <AppUserSetting ref="userSetting"></AppUserSetting>
-    <Menubar
-      class="w-full shadow-none !border-none bg-white/10 dark:bg-zinc-900/10 !backdrop-blur-md !backdrop-opacity-90"
-      breakpoint="750px" :model="items">
-      <template #end="{ item }">
-        <div class="flex items-center gap-2">
-          <UserAvatar v-if="isLogin" :user-info="user" class="hover-shadow-zinc" @click="showSetting">
-          </UserAvatar>
-          <Button v-else severity="secondary" label="登录" size="small" @click="showLoginForm"></Button>
-          <Tag :value="`v${config.public.blogVersion}`" v-tooltip.bottom="'博客版本: ' + config.public.blogVersion">
-          </Tag>
-          <!-- <Tag v-if="config.public.branchName" :value="`${config.public.branchName}`"
-            v-tooltip.bottom="`@nuxt/content@${config.public.branchName}`">
-          </Tag> -->
-          <Button rounded severity="secondary" @click="toggleDarkMode()" size="small">
-            <Icon :name="modeIcon"></Icon>
-          </Button>
-        </div>
-      </template>
-      <template #item="{ item, props }">
-        <NuxtLink v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-          <div
-            :class="`w-full cursor-pointer rounded-md flex items-center box-border px-2 py-2 ${curLabel === item.label ? 'bg-secondary' : ''}`"
-            v-ripple :href="href" @click="navigate">
-            <Icon :name="item.icon" size="1.5em" />
-            <span class="ml-2">{{ item.label }}</span>
-            <!-- <Badge v-if="item.badge" class="ml-auto" :value="item.badge" /> -->
-            <span v-if="item.shortcut"
-              class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut
-              }}</span>
-          </div>
-        </NuxtLink>
-        <a v-else v-ripple :href="item.url" :target="item.target" v-bind="props.action">
-          <span :class="item.icon" />
-          <span class="ml-2">{{ item.label }}</span>
-        </a>
-
-      </template>
-    </Menubar>
+    <div class="user-info flex items-center justify-between pt-8 pb-4">
+      <div class="left flex items-center">
+        <UserAvatar v-if="isLogin" :user-info="user" class="hover-shadow-zinc mr-4" @click="showSetting">
+        </UserAvatar>
+        <Button v-else severity="secondary" label="登录" size="small" @click="showLoginForm"></Button>
+        <span class="mr-2 text-xl">{{ user?.username }}</span>
+      </div>
+      <div class="right">
+        <Button rounded severity="secondary" @click="toggleDarkMode()" size="small">
+      <Icon :name="modeIcon"></Icon>
+    </Button>
+      </div>
+    
+    </div>
+    
   </div>
 </template>
 
@@ -56,7 +32,7 @@ const colorMode = useColorMode()
 const route = useRoute();
 const { disposeError } = useErrorDispose()
 const curLabel = ref('首页')
-const modes = ['system', 'light', 'dark']
+const modes = ['light', 'dark']
 const index = ref(modes.indexOf(colorMode.preference))
 const modeIcon = computed(() => {
   switch (colorMode.preference) {
@@ -131,7 +107,7 @@ const loginBlog = async (body) => {
     return;
   }
   console.log(`data`, data)
-  setUser(data.value.data?.user)
+  setUser(data.value?.data?.user)
 
   toast.add({
     severity: 'success',

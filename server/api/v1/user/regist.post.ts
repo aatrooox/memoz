@@ -14,7 +14,12 @@ export default defineEventHandler(async (event) => {
   if (count === 0) {
     console.log(`管理员用户`, count)
     role = 'admin'
-  } 
+  } else {
+    throw createError({
+      statusCode: 400,
+      statusMessage: '演示模式, 不允许手动注册',
+    })
+  }
 
   const _user = await prisma.user.findUnique({
     where: {

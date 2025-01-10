@@ -1,18 +1,14 @@
 <template>
-  <div class="flex flex-col box-border pt-8">
+  <div class="flex flex-col box-border">
     <!-- 热力图 -->
-    <div class="hot-view flex flex-wrap gap-1 transition-all duration-300 border box-border p-4 rounded-tl-md rounded-tr-md rounded-br-md relative shadow-inner border-blue-500">
+    <div class="hot-view flex flex-wrap gap-1 transition-all duration-300 rounded-tl-md rounded-tr-md rounded-br-md relative">
       <div class="w-4 h-4 bg-zinc-300" v-for="item in datas" :style="{}"></div>
 
-      <div class="stats-count absolute left-[-1px] bottom-[-24px] h-6 leading-6 px-2 text-xs border border-t-white rounded-bl-md rounded-br-md shadow-none border-blue-500" v-tooltip="`已累计记录888天`">888</div>
+      <!-- <div class="stats-count absolute left-[-1px] bottom-[-24px] h-6 leading-6 px-2 text-xs border border-t-white rounded-bl-md rounded-br-md shadow-none" v-tooltip="`已累计记录888天`">888</div> -->
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-const config = useRuntimeConfig()
-const colorMode = useColorMode()
-const modes = ['system', 'light', 'dark']
-const index = ref(modes.indexOf(colorMode.preference))
 // 没有记录默认为灰色. 十个灰色方块
 // 累计记录少于30天, 显示为蓝色方块, 不同深浅的蓝色表示当天记录的数量
 // 当天少于 3条 记录为浅蓝
@@ -105,9 +101,7 @@ const datas = ref([
     count: 2,
   },
 ])
-function toggleDarkMode() {
-  colorMode.preference = modes[(++index.value) % modes.length] || ''
-}
+
 
 </script>
 <style lang="less" scoped></style>
