@@ -68,20 +68,6 @@ export default defineNuxtConfig({
       // }
     // }
   },
-  // 解决了 mdc的一个依赖库 micromark 引入 debug 会报错的问题
-  // vite: {
-  //   optimizeDeps: {
-  //     include: ["debug"],
-  //   },
-  // },
-  // imports: {
-  //   presets: [
-  //     {
-  //       from: 'animejs/lib/anime.es.js',
-  //       imports: ['anime']
-  //     }
-  //   ]
-  // },
   colorMode: {
     preference: 'light', // default value of $colorMode.preference
     fallback: 'light', // fallback value if not system preference found
