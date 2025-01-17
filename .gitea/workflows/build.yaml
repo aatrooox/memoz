@@ -30,12 +30,12 @@ jobs:
         env: 
           DATABASE_URL: ${{ vars.DATABASE_URL }}
         run: |
-          rm -rf /root/web/main/*
-          mkdir -p /root/web/main/prisma
-          cp -R .output/* /root/web/main/
-          cp -R prisma/* /root/web/main/prisma/
-          cp -R ecosystem.config.cjs /root/web/main/ecosystem.config.cjs
-          cd /root/web/main
+          rm -rf /root/web/memo/*
+          mkdir -p /root/web/memo/prisma
+          cp -R .output/* /root/web/memo/
+          cp -R prisma/* /root/web/memo/prisma/
+          cp -R ecosystem.config.cjs /root/web/memo/ecosystem.config.cjs
+          cd /root/web/memo
           pm2 stop ecosystem.config.cjs
           prisma migrate deploy
           pm2 start ecosystem.config.cjs
