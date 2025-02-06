@@ -36,7 +36,6 @@ jobs:
           cp -R prisma/* /root/web/memo/prisma/
           cp -R ecosystem.config.cjs /root/web/memo/ecosystem.config.cjs
           cd /root/web/memo
-          pm2 stop ecosystem.config.cjs
           prisma migrate deploy
           pm2 start ecosystem.config.cjs
       - run: echo "  The ${{ gitea.repository }} repository has been cloned to the runner."
